@@ -92,8 +92,65 @@ namespace ProtocolHelper
             createChartButton.Location = new System.Drawing.Point(this.ClientSize.Width / 2 - createChartButton.Width / 2, this.ClientSize.Height / 2 - createChartButton.Height / 2);
 
             groupBox3.Controls.Add(createChartButton);
-
             groupBoxes.Add(groupBox3);
+
+            //Fourth group box
+            System.Windows.Forms.GroupBox groupBox4 = new System.Windows.Forms.GroupBox();
+            groupBox4.Width = this.Width;
+            groupBox4.Height = this.Height;
+
+            System.Windows.Forms.Button continueWithSameDocumentButton = new System.Windows.Forms.Button();
+            continueWithSameDocumentButton.Text = "Continue with current document";
+            continueWithSameDocumentButton.Click += ContinueWithSameDocumentClick;
+            continueWithSameDocumentButton.Width = 180;
+            continueWithSameDocumentButton.Location = new System.Drawing.Point(this.ClientSize.Width / 2 - continueWithSameDocumentButton.Width / 2, 30);
+
+            groupBox4.Controls.Add(continueWithSameDocumentButton);
+
+            System.Windows.Forms.Button continueWithNewDocumentButton = new System.Windows.Forms.Button();
+            continueWithNewDocumentButton.Text = "Continue with new document";
+            continueWithNewDocumentButton.Click += ContinueWithNewDocumentClick;
+            continueWithNewDocumentButton.Width = 180;
+            continueWithNewDocumentButton.Location = new System.Drawing.Point(this.ClientSize.Width / 2 - continueWithNewDocumentButton.Width / 2, 60);
+
+            groupBox4.Controls.Add(continueWithNewDocumentButton);
+
+            System.Windows.Forms.Button quitButton = new System.Windows.Forms.Button();
+            quitButton.Text = "Quit";
+            quitButton.Click += QuitClick;
+            quitButton.Location = new System.Drawing.Point(this.ClientSize.Width / 2 - quitButton.Width / 2, 90);
+
+            groupBox4.Controls.Add(quitButton);
+
+            groupBoxes.Add(groupBox4);
+        }
+
+        private void QuitClick(object sender, EventArgs e)
+        {
+            try
+            {
+                doc.Close();
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show("Failed to save file", "Failed save", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            app.Quit();
+            Environment.Exit(0);
+        }
+
+        private void ContinueWithNewDocumentClick(object sender, EventArgs e)
+        {
+            doc = app.Documents.Add();
+
+            ShowGroupBox(1);
+        }
+
+        private void ContinueWithSameDocumentClick(object sender, EventArgs e)
+        {
+            CreateGroupBoxes();
+            ShowGroupBox(1);
         }
 
         private void ShowGroupBox(int index)
@@ -167,6 +224,7 @@ namespace ProtocolHelper
         private void CreateChartButtonClick(object sender, EventArgs e)
         {
             CreateChart();
+            ShowGroupBox(++currentGroupBox);
         }
 
         private void CreateChart()
